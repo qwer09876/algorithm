@@ -1,0 +1,43 @@
+class Solution {
+    public String minWindow(String s, String t) {  
+        String result = "";//存储结果并返回。
+        //记录需要被匹配的次数
+        int count = t.length();//子串的长度
+        int right = 0;//用来滑动窗口，在s中左右划分长度
+        int left = 0;
+        Map<Character, Integer> map = new HashMap<>();
+        for (char c : s.toCharArray()) map.put(c, 0); //初始化s的字符，全部用0来表示
+        for (char c : t.toCharArray()) {
+            if (map.containsKey(c)) {//看S中是否有子串，没有就返回空
+                map.put(c, map.get(c) + 1); //初始化t中出现的字符数 看t中的字符在s中有多少个，计数
+            } else {
+                return "";
+            }
+        }
+      
+        while (right < s.length()) {//在s中，右边界不超过s长度
+            char c = s.charAt(right);//用来匹配字符
+            if (map.get(c) > 0) {
+                count--;//如果s中这个字符是子串中的字符，就让子串的长度减少（用完了就丢了）
+            }
+            map.put(c, map.get(c) - 1);//因为遍历到这个字符，相当于母串用过这个字符，并丢掉
+            right++;//往后走  （循环到子串中的字符在left到right中都包含）
+            while (count == 0) {
+                //替换最小结果
+                if(result.length() == 0){//如果第一次，保存
+                    result = s.substring(left, right);
+                }else if (result.length() > (right - left)) {//后面的几次，看谁的字符串更短
+                    result = s.substring(left, right);
+                }
+                //移动左指针
+                char c1 = s.charAt(left);
+                if (map.get(c1) == 0) {//如果后面的left+1到right仍然包含子串的内容就跳过这个字符
+                    count++;
+                }
+                map.put(c1, map.get(c1) + 1);
+                left++;//为了找到最短的，往后去遍历
+            }
+        }
+        return result;//包含子串的最短的字符串
+    }
+}

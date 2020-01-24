@@ -1,0 +1,41 @@
+class Solution {
+	    public boolean makesquare(int[] nums) {
+	        if (nums.length < 4) { //如果没有4条边就不能成正方形
+	            return false;
+	        }
+	        int sum = 0;//为了算平均数
+	        for (int i = 0; i < nums.length; i++) {
+	            sum += nums[i];//先求和
+	        }
+	        if (sum % 4 != 0) { //判断能不能分成四份
+	            return false;
+	        }
+	        Integer[] newNums = new Integer[nums.length];//为了排序，把题中数组改为包装类
+	        for (int i = 0; i < nums.length; i++) {
+	            newNums[i] = nums[i];//一个个赋值改变
+	        }
+	        Arrays.sort(newNums, new Comparator<Integer>() {//比较器排降序
+	            public int compare(Integer o1, Integer o2) {
+	                return o2 - o1;
+	            }
+	        }); // 优化
+	        if(newNums[0]>sum/4)return false;//如果最大的那个比边长大，就不是正方形
+	        int[] huan = new int[4];//为了存储四个边长
+	        return dfs(0, newNums, huan, sum / 4);//深搜判断能否成正方形
+	    }
+
+	    boolean dfs(int i, Integer[] nums, int[] huan, int result) {
+	        if(i>=nums.length) {//遍历完成即边界条件
+	        	if(huan[0]==result&&huan[1]==result&&huan[2]==result&&huan[3]==result)return true;//如果得到的边长数组值都等于边长就是正方形
+	        }
+	        for(int x=0;x<4;x++) {//遍历四个存储边长
+	        	if(huan[x]+nums[i]>result)continue;//如果存不进去就换一个
+	        	huan[x]+=nums[i];//能存就存进去
+	        	if(dfs(i+1,nums,huan,result))//递归，是否成功存满数据并是否都是边长
+	        		return true;	        	
+                huan[x]-=nums[i];//回溯
+
+	        }
+	        return false;//如果不是就返回不是正方形
+	    }
+	}

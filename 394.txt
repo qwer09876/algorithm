@@ -1,0 +1,36 @@
+class Solution {
+    private char[] str;
+	public String decodeString(String s) {
+        str=s.toCharArray();
+        return SonOfString(0, s.length() - 1);//参数为头尾
+	}
+
+	private String SonOfString(int i, int e) {//用头尾位置处理问题
+		if (i > e)//如果头比尾大，直接返回无
+			return "";//
+		StringBuilder sb = new StringBuilder();//定义字符串sb用来存返回结果
+		while (i <= e) {//然后循环处理展开字符串放入sb
+			if (str[i] <= 'z' && str[i] >= 'a' || str[i] <= 'Z' && str[i] >= 'A') {//如果是字母就把字母放到sb结果里
+				sb.append(str[i++]);//
+			} else {
+				int value = 0;//不然就是（value记录次数）
+				while (str[i] <= '9' && str[i] >= '0')//如果不是数组直接退出
+					value = value * 10 + (str[i++] - '0');//把【】前面的次数存下来，、
+				int left = i;//左边括号位置开始等于i(因为i在取次数时已经递增了)剩下的次数后面绝对是括号
+				int count = 1;//记括号的是否配对
+				while (count != 0) {//
+					left++;//如果左边有就记
+					if (str[left] == '[')//
+						count++;//
+					else if (str[left] == ']')//如果是右边有就抵消（题目有要求，必须配对）
+						count--;//
+				}
+				String st = SonOfString(i + 1, left - 1);//递归（每次把括号中的字符串翻倍放入随便中）
+				while (value-- > 0)//按记录下每次的次数来放入
+					sb.append(st);//增加到sb中
+				i = left + 1;//跳过右括号
+			}
+		}
+		return sb.substring(0);//返回最后得到的结果
+	}
+}

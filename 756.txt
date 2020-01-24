@@ -1,0 +1,21 @@
+class Solution {
+	    public boolean pyramidTransition(String bottom, List<String> allowed) {
+	        if(bottom=="")return true;//如果底部字符串是空的，直接是对
+	        return Judge(bottom,"",allowed);//调用Judge函数
+	    }
+//函数作用是判断是否合格
+		public boolean Judge(String a, String b, List<String> allowed) {
+			boolean jud=false;//用来存储返回值结果
+            if(a.length()==1)return true;//只有一个，也就是一个顶点
+			if(a.length()-b.length()>1) {//存顶点的变量和底部端点的长度差要大于1
+				for(String s:allowed) {//迭代器遍历方块
+					if(a.charAt(b.length())==s.charAt(0)&&
+					a.charAt(b.length()+1)==s.charAt(1)){//方块第一第二个是两个底部端点，判断此端点是否与bottom中的端点一样，如果有，就把顶点存到b里
+						jud=(jud||Judge(a,b+s.charAt(2),allowed));//寻找其中有顶点的那一个
+					}
+				}
+			return jud;	//返回所得到的是否有顶点
+		}
+			else return Judge(b,"",allowed);//如果顶点大于端点，用存储的顶点当端点（一层一层的判断端点），把顶点存储器清空
+		}
+	}
