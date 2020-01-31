@@ -1,0 +1,27 @@
+class Solution {
+			private boolean[] vis;//用来记录是否用过
+			private int l;//记录传入数组的长度
+		    public List<List<Integer>> permute(int[] nums) {
+		    	List<List<Integer>> res=new ArrayList<>();//把最后的结果存到这个二维列表
+		    	l=nums.length;
+		        vis = new boolean[l];
+		        dfs(res, nums, new ArrayList<Integer>(), vis);//dfs把结果算出来，返回
+		        return res;
+		    }
+
+			private void dfs(List<List<Integer>> res, int[] nums, ArrayList<Integer> tmp, boolean[] vis) {
+				if (tmp.size() == l) {//如果得到的数组和原数组的长度一样
+		            res.add(new ArrayList<>(tmp));//放进去并重建list
+		            return;
+		        }
+				 for (int i = 0; i < l; i++) {
+			            if (!vis[i]) { //如果不重复进入
+			            vis[i] = true;//记录使用过
+			            tmp.add(nums[i]);//增加到tmp
+			            dfs(res, nums, tmp, vis);//递归
+			            vis[i] = false;//回溯
+			            tmp.remove(tmp.size() - 1);//回溯，即把最后一个移除
+			            }
+				 }
+			}
+		}

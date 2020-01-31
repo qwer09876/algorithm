@@ -1,0 +1,22 @@
+class Solution {
+    public List<String> generateParenthesis(int n) {
+        List<String> r=new ArrayList<>();
+        dfs("",n,n, r);
+        return r;
+        
+    }
+    private void dfs(String s,int left,int right,List res) {
+        if(left == 0 && right == 0) {
+            res.add(s);//左括号和右括号都为n个,直接返回列表
+            return;
+        }
+        //左括号的个数小于n 才能继续放左括号
+        if(left > 0) {
+            dfs(s+"(",left-1,right,res);
+        }
+        //左括号个数必须大于右括号的放置个数 才能继续放右括号
+        if(left < right) {
+            dfs(s+")",left,right-1,res);
+        }
+    }
+}

@@ -1,0 +1,39 @@
+class Solution {//此题为查字典
+    private boolean[][] vis;//地图，以免重复记（死循环）
+    private int[][] d={{0,-1},{-1,0},{1,0},{0,1}};//方向
+    public boolean exist(char[][] board, String word) {
+        if(board == null) {
+            return false;//如果字典是空的没必要查了
+        }
+        vis=new boolean[board.length][board[0].length];//因为是记录，所以地图大小和字典一样
+        for(int i = 0; i < board.length; i++) {//因为字典里的每个都可以组合
+            for(int j = 0; j < board[0].length; j++) {
+                if(dfs(board, i, j, word, 0)) {
+                    return true;//全部情况遍历通过就有，
+                }
+            }
+        }
+        return false;//不然没有这个单词
+    }
+    private boolean dfs(char[][] board, int i, int j, String word, int m) {
+        //递归的第一步，列出终止条件，避免进入死循环。
+        if(m == word.length() - 1) {//如果查到的单词的最后一个字母了，直接看最后一个字母是否相等找到，如果找到返回有，不然没这个单词
+            return board[i][j] == word.charAt(m);//
+        }
+        if(board[i][j]==word.charAt(m)){//如果前面的字母相等，才有后面的机会
+            vis[i][j] = true;//如果搜了并匹配，地图标记下
+            //然后分别从四个方向进行搜索
+            for (int k = 0; k < 4; k++) {
+                int x = i + d[k][0];
+                int y = j + d[k][1];
+                //判断边界，判断地图是否走过，判断递归是否成立
+                if ((x >= 0 && x < board.length && y >= 0 && y < board[0].length) && !vis[x][y] && dfs(board, x, y, word, m + 1)) {//
+                    return true;
+                }
+            }
+            //搜索完以后需要回溯
+            vis[i][j] = false;
+        }
+        return false;//如果都不成立，就没有这个单词
+    }
+}

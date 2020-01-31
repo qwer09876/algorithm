@@ -1,0 +1,18 @@
+class Solution {
+    public List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();//二维列表结果存储
+        dfs(nums,res,0,new ArrayList<>());//深搜
+        return res;
+    }
+    private void dfs(int[] nums,List<List<Integer>> res,int i,List<Integer> ji){
+        if(i>nums.length)return ;//遍历每个子集包括非真子集
+        if(!res.contains(ji)){//是否重复
+            res.add(new ArrayList<>(ji));//不重复就把每次存储的结果放进去
+        }
+        for(int j=i;j<nums.length;j++){
+            ji.add(nums[j]);//一个一个存入（从i开始为了去重）
+            dfs(nums,res,j+1,ji);//递归
+            ji.remove(ji.size()-1);//回溯
+        }
+    }
+}
