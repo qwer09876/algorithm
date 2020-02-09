@@ -1,0 +1,40 @@
+class Solution {
+    private int N;//用来记录n也就是输入值
+    private char[][]queen;//生成棋盘
+    private List<List<String>>res=new ArrayList<>();//结果
+    private boolean[]x;//列
+    private boolean[]a;//行
+    private boolean[]b;//斜
+    public List<List<String>> solveNQueens(int n) {
+        N=n;//存输入
+        queen=new char[n][n];//开辟棋盘
+        for(int i=0;i<n;i++)
+           for(int j=0;j<n;j++){//初始化为.
+               queen[i][j]='.';
+           }
+        x=new boolean[n];//都是开辟地图空间（标记）
+        a=new boolean[2*n-1];
+        b=new boolean[2*n-1];
+        solve(0);
+        return res;//返回二维列表
+    }
+    private void solve(int i){
+        if(i==N){//如果完成了最后一行
+            List<String>t=new ArrayList<>();//创建一个一级列表
+            for(char[]c:queen){//迭代遍历
+                t.add(new String(c));//转化为字符串放入列表
+            }
+            res.add(t);//放入二级列表完成
+            return;
+        }
+    
+    for(int j=0;j<N;j++){//列遍历
+        if(x[j]||a[i+j]||b[N-1-(i-j)]) continue;//如果列行斜都有Q直接跳出
+        queen[i][j]='Q';//如果周围没有Q就放
+        x[j]=a[i+j]=b[N-1-(i-j)]=true;//标记
+        solve(i+1);//递归
+        x[j]=a[i+j]=b[N-1-(i-j)]=false;//回溯
+        queen[i][j]='.';//回溯
+    }
+    }
+}

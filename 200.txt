@@ -1,0 +1,26 @@
+class Solution {
+    public int numIslands(char[][] grid) {//染色题，表示学长讲过
+        int num = 0;
+        for(int i = 0; i < grid.length; i++){//遍历所有位置
+            for(int j = 0; j < grid[0].length; j++){
+                if(grid[i][j] == '1'){//如果是陆地
+                    ranse(grid, i, j);//进入染色
+                    num++;//染一次，算一块岛屿，因为染完后，这块岛屿的所有位置都变成2，
+                }
+            }
+        }
+        return num;
+    }
+    public void ranse(char[][] grid, int i, int j){
+        if(i < 0 || i >= grid.length ||
+           j < 0 || j >= grid[0].length ||
+           grid[i][j] != '1'){//边界条件，而且每块地方只有是1才能是岛屿
+            return;
+        }
+        grid[i][j] = '2';//染成同一块岛屿的颜色2
+        ranse(grid, i + 1, j);//四周扩散，找1染色s
+        ranse(grid, i - 1, j);//
+        ranse(grid, i, j + 1);//
+        ranse(grid, i, j - 1);//
+    }
+}

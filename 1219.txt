@@ -1,0 +1,30 @@
+class Solution {
+    private int max = 0;//  存最大的金矿采集数
+    public int getMaximumGold(int[][] grid) {
+        int row = grid.length,col = grid[0].length;//记录行列个数
+        boolean[][] vis = new boolean[row][col];//定义标记数组
+        for(int i = 0;i < row;i++){//遍历
+            for(int j = 0;j < col;j++){
+                if(grid[i][j] != 0)//如果不是0，有意义，就可以进去加
+                    dfs(grid,i,j,0,vis);//
+                
+            }
+        }
+        
+        return max;//最后的采集数
+    }
+    
+    private void dfs(int[][] grid,int x,int y,int gold,boolean[][] vis){
+        if((x < 0 || x >= grid.length) || (y < 0 || y >= grid[0].length) || grid[x][y] == 0 || vis[x][y]){//边界条件
+            max = Math.max(max,gold);//把最大黄金数计入max
+            return;//
+        }
+        gold += grid[x][y];//用来存黄金个数
+        vis[x][y] = true;//遍历完并标记
+        dfs(grid,x + 1,y,gold,vis);//下
+        dfs(grid,x - 1,y,gold,vis);//上
+        dfs(grid,x,y + 1,gold,vis);//右
+        dfs(grid,x,y - 1,gold,vis);//左
+        vis[x][y] = false;//回溯
+    }
+}

@@ -1,0 +1,32 @@
+class Solution {
+   public List<List<String>> partition(String s) {
+    return dfs(s, 0);//分治解，由大化小，由小求解证大
+    }
+
+    private List<List<String>> dfs(String s, int start){
+        if (start == s.length()) { //递归出口，存空字符串
+            List<String> list = new ArrayList<>();//创建一个列表
+            List<List<String>> ans = new ArrayList<>();//更新一个新二维列表
+            ans.add(list);//存进空字符串
+            return ans;
+        }
+        List<List<String>> ans = new ArrayList<>();//创建二维列表
+        for (int i = start; i < s.length(); i++) {//分治，每次分出两份，从前面那份开始解
+            if (huiwen(s.substring(start, i + 1))) {//看前面这份是否回文
+                String left = s.substring(start, i + 1);//如果是回文数，前面的存下来
+                //遍历后边字符串的所有结果，将当前的字符串加到头部
+                for (List<String> l : dfs(s, i + 1)) {//每次递归会得到一组
+                    l.add(0,left);//把每组的字符串插入列表末尾，jdk-9API顺序（String ,index）,mistake.
+                    ans.add(l);//把得到的所有情况存入二维列表
+                }
+            }
+        }
+        return ans;//返回
+    }
+
+    private boolean huiwen(String s) {
+        for(int i=0,j=s.length()-1;i<j;i++,j--)//回文数，最后一个和第一个相等，然后一直左右移比较
+            if (s.charAt(i) != s.charAt(j))return false;
+        return true;
+    }
+}
