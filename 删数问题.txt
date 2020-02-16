@@ -1,0 +1,55 @@
+package shanshu;
+
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+	static int len,a[];
+	public static void main(String[] args) {
+		Scanner sr=new Scanner(System.in);//输入
+		int K=sr.nextInt();//最小的 K 个元素，按从小到大的顺序组合成一个多位数，
+		int M=sr.nextInt();//从中删除 M 个数位上的数字
+		
+		Long[] k=new Long[2*K];//存K个元素的值
+		Long p=0l,q=1l;//公式的两个增值变量
+		for(int i=0;i<2*K;i++) {//循环2k内个值
+			if(i%2==0) {p=k[i]=2*p+1;}//存入公式一的值
+			else {q=k[i]=4*q+5;}//二
+		}
+		Arrays.sort(k);//存完，排升序
+		String s="";
+		for(int i=0;i<K;i++) {//输出结果
+			s+=k[i];//用字符串存下来，用于删除
+			System.out.print(k[i]);
+		}		
+		System.out.println();//输出换行
+		len=s.length();记录长度
+//		System.out.println(len);
+		a=new int[len];//新建整形数组存入单个的数字
+		for(int i=0;i<len;i++)
+	    {    	
+	    	a[i]=s.charAt(i)-48;//存入
+	    }
+	    for(int i=0;i<M;i++)//
+	    {
+	        for(int j=0;j<len-1;j++)
+	        {//因为第一个在循环外判断，所以从1开始，
+	            if(a[j]<a[j+1])//删除最小的那个数字
+	            {
+	                delete(j);
+	                break;//删除M次
+	            }
+	        }
+	    }
+	    String srt="";//再用个字符串存剩下的数字数组
+		for(int i=0;i<len-M;i++) {//
+			srt+=a[i];////
+		}System.out.print(srt);//输出字符串
+		sr.close();
+	}
+
+	private static void delete(int i) {
+		for(int j=i;j<len-1;j++)//为了删除
+	        a[j]=a[j+1];//实现覆盖
+	}
+}

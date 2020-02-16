@@ -1,0 +1,67 @@
+package xiufugonglu;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+	private static int n,m,ans,count,vis[]=new int[1000000];//定义变量并初始化
+	public static void main(String[] args) {
+		Scanner sr=new Scanner(System.in);
+		n=sr.nextInt();//输入村庄数
+		m=sr.nextInt();//输入公路数
+//		x=new int[m];
+//		y=new int[m];
+//		t=new int[m];
+//		for(int i=0;i<m;i++) {
+//			x[i]=sr.nextInt();
+//			y[i]=sr.nextInt();
+//			t[i]=sr.nextInt();
+//		}
+		List<student> list=new ArrayList<>();//定义一个列表来存储村庄名称和修复时间
+		for(int i=0;i<m;i++) {
+			list.add(new student(sr.nextInt(),sr.nextInt(),sr.nextInt()));//输入村庄名字和时间
+		}
+		list.sort(new Comparator<student>() {//比较器，列表按时间排升序
+
+			@Override
+			public int compare(student o1, student o2) {
+				// TODO Auto-generated method stub
+				return o1.t-o2.t;//升序
+			}
+		});
+//		for(int i=0;i<m;i++) {
+//			System.out.println(list.get(i).x+" "+list.get(i).y +" "+list.get(i).t);
+//		}
+		for(int i=0;i<m;i++) {
+			int a1=fid(list.get(i).x);//存未连通的村庄1
+			int a2=fid(list.get(i).y);//存未连通的村庄2
+			if(a1!=a2) {//最后的两个村庄合并后是否为一条路
+				ans++;记录个数
+				vis[a2]=a1;//把未连通的存到标记数组中
+				count=list.get(i).t;//记录并刷新此时所需的时间，以便得到最后的时间
+				if(ans==n-1)break;//如果遍历完，未连通的经过组合后可以连通，返回最后那两个村庄的修路时间
+			}
+		}
+		if(ans!=n-1)System.out.println(-1);//如果都不能连通。就不能修
+		else System.out.println(count);
+		sr.close();
+
+	}
+	private static int fid(int x) {
+		// TODO Auto-generated method stub
+		if(vis[x]==0)return x;//标记，如果未连通直接返回村庄名
+		return vis[x]=fid(vis[x]);//递归，存储并返回当前连通的道路，直到最后一个未连通的村庄
+	}
+}
+class student{//用来做结构体存储
+	int x,y,t;
+
+	public student(int x, int y, int t) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.t = t;
+	}
+}

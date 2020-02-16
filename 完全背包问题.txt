@@ -1,0 +1,29 @@
+package wanquanbeibao;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+				Scanner sr=new Scanner(System.in);
+				int N=sr.nextInt();//输入物品种类数
+				int V=sr.nextInt();//输入背包容量
+				
+				int[] v=new int[N+1],w=new int[N+1];
+				//定义物品体积，价值
+				int[] f=new int[V+1];
+				for(int i=1;i<=N;i++) {//存入数据，体积，价值
+					v[i]=sr.nextInt();
+					w[i]=sr.nextInt();
+				}
+				for(int i=1;i<=N;i++) {//对每种物品进行判断
+					for(int j=v[i];j<=V;j++) {从当前体积开始找
+						f[j]=Integer.max(f[j], f[j-v[i]]+w[i]);//能取就j-v[i]然后可以重复取，直到取得最大的价值为止
+					}
+				}
+//				for(int j=0;j<=V;j++) //
+				System.out.println(f[V]);
+				sr.close();//
+			}
+}

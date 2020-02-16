@@ -1,0 +1,15 @@
+package gaojinduAaddB;
+
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sr=new Scanner(System.in);
+		BigInteger a=sr.nextBigInteger();//不用说了，简单的大数加减，记住大数的加减乘除就好
+		BigInteger b=sr.nextBigInteger();
+		System.out.println(a.add(b));
+		sr.close();
+	}
+}

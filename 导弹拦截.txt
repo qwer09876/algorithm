@@ -1,0 +1,52 @@
+import java.util.Scanner;
+
+	public class Main{
+		static int n,y,m;
+		static int a[]=new int[100005];
+		static int d1[]=new int[100005];
+		static int d2[]=new int[100005];
+		static String s;		
+		public static void main(String[] args){
+			//InputReader in=new InputReader(System.in);
+			Scanner in=new Scanner(System.in);
+			do{
+				a[++n]=Integer.parseInt(s=in.next());
+			}while(in.hasNextInt());//测试导弹的组数未确定
+			int len1=1,len2=1;
+			d1[1]=a[1];d2[1]=a[1];//（dp）首先初始化，便于dp
+			for(int i=2;i<=n;i++){
+				if(d1[len1]>=a[i]) d1[++len1]=a[i];//第一问查找最长不上升序列
+				else{
+					int p1=upperbound(d1, 1, len1, a[i]); //返回d1中第一个小于a[i]的数
+					d1[p1]=a[i];
+				}
+				if(d2[len2]<a[i]) d2[++len2]=a[i];//求上升序列
+				else{
+					int p2=lowerbound(d2, 1, len2, a[i]);//返回d2中第一个大于等于a[i]的数
+					d2[p2]=a[i];
+				}
+			}
+			System.out.println(len1);
+			System.out.println(len2);
+			
+		}
+		public static int upperbound(int []arr,int l,int r,int key){ //大于
+			while(l<r){
+				int m=(l+r)/2;
+				if(arr[m]>=key) l=m+1;
+				else r=m;
+			}
+			return l;
+		}
+		public static int lowerbound(int []arr,int l,int r,int key){ //大于等于，也就是c++里的STL的最小上升序列和最大上升序列
+			while(l<r){
+				int m=(l+r)/2;
+				if(arr[m]>=key)  r=m;
+				else l=m+1;
+			}
+			return l;
+		}
+		
+
+	}
+	

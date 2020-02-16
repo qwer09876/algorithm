@@ -1,0 +1,30 @@
+package duochongbeibao;
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+				Scanner sr=new Scanner(System.in);
+				int N=sr.nextInt();//输入物品数量种类
+				int V=sr.nextInt();//输入背包容量
+				
+				int[] v=new int[N+1],w=new int[N+1],s=new int[N+1];//存储物品属性：体积，价值，物品个数
+				
+				int[] f=new int[V+1];//滚动数组，存每个容量数据下最大的价值
+				for(int i=1;i<=N;i++) {//存入属性
+					v[i]=sr.nextInt();//体积，价值，数量
+					w[i]=sr.nextInt();
+					s[i]=sr.nextInt();
+				}
+				for(int i=1;i<=N;i++) {//遍历每种物品
+					for(int k=0;k<=s[i];k++)//就是展开这类物品，调用此每个此物品次背包问题
+						for(int j=V;j>=v[i];j--) //背包问题写法
+						f[j]=Integer.max(f[j],f[j-v[i]]+w[i]);	//求出每个容量下最大价值
+					}
+				}
+				System.out.println(f[V]);//求现在背包最大啊容量下的最大价值
+				sr.close();
+			}
+}
+

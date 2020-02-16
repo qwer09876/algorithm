@@ -1,0 +1,51 @@
+package wangyedaohang;
+
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+
+	static Stack<String> stack=new Stack<>(),stack1=new Stack<>();//定义两个栈
+	public static void main(String[] args) {
+		stack.push("http://www.acm.org/");//默认的网站
+		Scanner sr=new Scanner(System.in);//输入
+		int n=sr.nextInt();//输入测试数据组数
+		for(int i=0;i<n;i++) {//
+			sr.nextLine();//每组直接有一行空格
+		while(sr.hasNext()) {//看有没有输入
+			
+			String s=sr.next();//有输入便存入字符串s
+//			System.out.println(s);
+			if(s.equals("QUIT"))break;//如果是退出，跳出循环
+			else if(s.equals("VISIT")) {//如果是访问，再输入一个网站，并推入栈中
+				String t=sr.next();//输入网站
+				stack.push(t);//推入栈中
+				System.out.println(t);//访问的话，就得显示访问的网站，所以打印网站
+				init();//初始化栈清空第二个栈里的东西
+			}
+			else if(s.equals("BACK")) {//如果是返回
+				if(stack.size()>1) {//看栈里面有东西没
+					stack1.push(stack.peek());//有就把栈顶元素推进二栈为存入后退栈
+					stack.pop();//然后取出栈顶元素
+					System.out.println(stack.peek());//输出取出前进站顶端后的当前页
+				}
+				else System.out.println("Ignored");//如果没有就输出错误
+			}
+			else if(s.equals("FORWARD")) {//看他是不是后退栈
+				if(!stack1.empty()) {//即，二栈的元素是否为空
+					stack.push(stack1.peek());//不是，把当前推入到栈中
+					System.out.println(stack1.peek());//输出推入的顶端栈元素
+					stack1.pop();//移除二栈中的后退栈
+				}
+				else System.out.println("Ignored");//如果后退栈即二栈中没有，错误
+			}
+		}}
+		sr.close();
+		
+	}
+	private static void init() {//清空二栈的内容
+		// TODO Auto-generated method stub
+		while(!stack1.empty())stack1.pop();//
+	}
+
+}

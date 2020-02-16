@@ -1,0 +1,39 @@
+package hunhebeibao;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+
+		Scanner sr = new Scanner(System.in);
+		int N = sr.nextInt();//输入种类
+		int V = sr.nextInt();//输入
+
+
+		int[] v = new int[N + 1], w = new int[N + 1], s = new int[N + 1];//体积，价值，次数
+
+		int[] f = new int[V + 1];//滚动数组存指定容量的最大价值
+		for (int i = 1; i <= N; i++) {
+			v[i] = sr.nextInt();
+			w[i] = sr.nextInt();
+			s[i] = sr.nextInt();
+		}//输入体积，价值，次数
+		for (int i = 1; i <= N; i++) {
+			if (s[i] == 0) {//如果
+				for (int j = v[i]; j <= V; j++) {//完全背包
+							f[j] = Integer.max(f[j], f[j - v[i]] + w[i]);//
+				}
+			} else {//
+				for(int j=1;j<=s[i];j++) {//多重背包，s[i]次使用
+					for(int k=V;k>=v[i];k--)//01背包，简单的双重循环背包问题
+						f[k]=Integer.max(f[k], f[k-v[i]]+w[i]);//
+					}
+				
+			}
+		}
+//				for(int j=0;j<=V;j++) 
+		System.out.println(f[V]);//最后得到的混合背包最大价值
+		sr.close();
+	}
+}

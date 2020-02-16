@@ -1,0 +1,62 @@
+package mugunjiagong;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StreamTokenizer;
+import java.util.Arrays;
+
+public class Main {
+	static mugun[] mu;//结构体数组，存长宽
+	static int n,m,wood[];
+	public static void main(String[] args) throws IOException {
+		
+		StreamTokenizer sr=new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));//优化输入
+		sr.nextToken();//
+		n=(int) sr.nval;//输入棍子个数
+		mu=new mugun[n];//开辟空间
+		wood=new int[n];
+		for(int i=0;i<n;i++) {//输入木棍长宽
+			sr.nextToken();
+			int n1=(int) sr.nval;//
+			sr.nextToken();
+			int n2=(int) sr.nval;//
+//			System.out.println(n1+" "+n2);
+			mu[i]=new mugun(n1,n2);//存入结构体
+		}
+		Arrays.sort(mu);//将结构体排升序
+		for(int i=0;i<n;i++) {//
+			if(wood[m]<mu[i].w) {//因为排序是按照长度优先从小到大，所以wood用来存棍子的宽
+				wood[++m]=mu[i].w;//判断宽度如果适合，直接放进，用来比较下一轮
+			}
+			else wood[lowerBound(wood,1,m+1,mu[i].w)]=mu[i].w;//不是上升子序列的话，加时m+1
+		}
+		System.out.println(m);//
+	}
+	private static int lowerBound(int[] a, int i, int j, int w) {
+		while(i<j) {//最小上升子序列
+			int m=i+(j-i)/2;
+			if(a[m]<w)i=m+1;//二分法用来重新选择上升子序列起点
+			else j=m-1;//
+		}
+		return i;
+	}
+	
+
+}
+class mugun implements Comparable<Object>{
+
+	int l,w;
+	public mugun(int l, int w) {//构造器存入数据
+		this.l = l;
+		this.w = w;
+	}
+
+	@Override
+	public int compareTo(Object o) {//比较器，排序用
+		mugun mu=(mugun)o;
+		if(mu.l==this.l)return mu.w-this.w;
+		else return mu.l-this.l;//
+	}
+	
+}

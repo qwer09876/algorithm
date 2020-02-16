@@ -1,0 +1,29 @@
+package beibao;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+				Scanner sr=new Scanner(System.in);
+				int N=sr.nextInt();//输入物品数
+				int V=sr.nextInt();//输入容量
+				
+				int[] v=new int[N+1],w=new int[N+1];//用来存储物品属性体积，价值
+				
+				int[] f=new int[V+1];//所谓的滚动数组，最后一个就是结果（dp）
+				for(int i=1;i<=N;i++) {
+					v[i]=sr.nextInt();//输入体积
+					w[i]=sr.nextInt();//价值
+				}
+				for(int i=1;i<=N;i++) {循环每个物品，以寻最大价值
+					for(int j=V;j>=v[i];j--) {//从V开始，保证了选择时只会选择一次
+						f[j]=Integer.max(f[j],f[j-v[i]]+w[i]);//寻求当前物品是否是搜索后最大的价值，从最小物品容量开始把每个容量的最大价值都算出来，比如容量为5，滚动数组取出为5的容量的那个最大价值，4就是4的最大价值，
+					}
+				}
+				
+				System.out.println(f[V]);//结束循环后的滚动数组就是各个容量里最大的价值，取出最大容量的最大的价值
+				sr.close();
+			}
+}
