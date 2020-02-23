@@ -1,0 +1,45 @@
+package Jump_Home;
+
+import java.util.Scanner;
+
+public class Main {
+	static int[][] a,move= {{0,1},{1,0},{0,-1},{-1,0}};//用来记录方向
+	static boolean[] vis;
+	static int ans=0;
+	static final int N=5;
+	public static void main(String[] args) {
+		Scanner sr=new Scanner(System.in);
+		a=new int[N][N];
+		vis=new boolean[1000000];//判断是否重复
+		for(int i=0;i<N;i++) {//
+			for(int j=0;j<N;j++) {
+				a[i][j]=sr.nextInt();//输入5*5的表格
+			}
+		}
+		for(int i=0;i<N;i++) {
+			for(int j=0;j<N;j++) {
+				dfs(i,j,a[i][j],1);//每个数开始遍历是否是一种方法
+			}
+		}
+		System.out.println(ans);//最终的方法
+		sr.close();
+	}
+	private static void dfs(int x, int y, int sum, int wei) {
+			if(wei==100000) {//如果有五位数
+			if(!vis[sum]) {
+				vis[sum]=true;标记
+				ans++;计数
+			}
+			wei=1;//归1
+			return;//边界条件
+		}
+		for(int i=0;i<4;i++) {//深搜的方法
+			int sx=x+move[i][0];//方向
+			int sy=y+move[i][1];//
+			if(sx>=0&&sx<N&&sy>=0&&sy<N) {//边界
+				dfs(sx,sy,sum+(a[sx][sy]*wei*10),wei*10);//搜索的方向，把每种组合记录下来，把位数记录
+			}
+		}
+	}
+
+}

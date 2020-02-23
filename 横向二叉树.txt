@@ -1,0 +1,95 @@
+package HengXiangErChaShu;
+import java.util.Scanner;
+
+public class Main {
+    public static int root;
+    public static point[] tree = new point[10005];//数的点
+    
+    static class point {
+        public int value;   //自身节点编号
+        public int father;  //父母节点编号
+        public int left;    //左孩子节点编号
+        public int right;   //右孩子节点编号
+        
+        public point() {
+            this.value = 0;//
+            this.father = 0;//
+            this.left = 0;
+            this.right = 0;
+        }
+    }
+    
+    public void dfs(int start, String s, int n, String s1) {
+        if(tree[start].value == root)//如果从根开始的节点是自身节点
+            s = s + tree[start].value;//把根放进去
+        else {
+            s = s + "-|-";//不然把分支放进去
+            s = s + tree[start].value;//再把节点放进去
+        }
+        if(tree[start].right > 0) {//如果有右节点
+            s1 = s1 + "1";//标记为1
+            dfs(tree[start].right, s, n + 1, s1);//往右边深搜
+            s1 = s1.substring(0, s1.length() - 1);//回溯
+        }
+        int len = s.length();//记录长度
+        int cot = 0;//计二叉树层数
+        for(int i = 0;i < len;i++) {//
+            if(s.charAt(i) == '|') {//遍历存二叉树结构的层数。
+                if(s1.length() <= cot + 1 || s1.charAt(cot) != s1.charAt(cot + 1))//每一层二叉树有左右树
+                    System.out.print("|");//放入|
+                else
+                    System.out.print(".");//不然放入小数点
+                cot++;
+            } else if(cot < n) {如果计数少于当前位数
+                System.out.print(".");//输出小数点
+            } else {
+                System.out.print(s.charAt(i));//不然输出节点
+            }
+        }
+        if(tree[start].left > 0 || tree[start].right > 0)//只要有左右节点就放入框架
+            System.out.print("-|");//
+        System.out.println();//换行
+        if(tree[start].left > 0) {//如果是左节点
+            s1 = s1 + "0";//标记0
+            dfs(tree[start].left, s, n + 1, s1);//往左边深搜
+            s1 = s1.substring(0, s1.length() - 1);//回溯截下
+        }
+    }
+    
+    public static void main(String[] args) {
+        Main test = new Main();//
+        Scanner in = new Scanner(System.in);
+        String A = in.nextLine();//输入字符串
+        String[] arrayA = A.split(" ");//空格分隔
+        root = Integer.valueOf(arrayA[0]);//把第一个元素作为根节点
+        for(int i = 0;i < tree.length;i++)//
+            tree[i] = new point();//开辟树数组的空间
+        for(int i = 0;i < arrayA.length;i++) {
+            int a = Integer.valueOf(arrayA[i]);所有的节点的存到自身节点编号中
+            tree[a].value = a;//
+        }
+        for(int i = 1;i < arrayA.length;i++) {
+            int a = Integer.valueOf(arrayA[i]);//遍历，除了根节点
+            int temp = root;//交换节点位置
+            while(true) {//死循环
+                if(a > temp) {//如果比根节点大，
+                    if(tree[temp].right == 0) {//如果右边空值，放右节点
+                        tree[temp].right = a;//并且结束
+                        break;
+                    } else
+                        temp = tree[temp].right;//不然把右节点当成根
+                }
+                else {
+                    if(tree[temp].left == 0) {//如果比根节点小，并且是空值
+                        tree[temp].left = a;//放到左边
+                        break;
+                    } else 
+                        temp = tree[temp].left;//不然把左节点当成根
+                }
+            }
+        }
+        String s = "";//存字符串
+        String s1 = "";//
+        test.dfs(root, s, 0, s1);//深搜，打表，根节点，s,位数，s1
+    }
+}

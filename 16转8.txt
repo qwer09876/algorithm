@@ -1,0 +1,29 @@
+package jinzhizhuanhuan;
+
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sr=new Scanner(System.in);
+		int n=sr.nextInt();//输入16进制数个数
+		String s="";//字符串存16进制数
+		Long result=0l;//存结果
+		for(int i=0;i<n;i++) {
+			result=0l;//每次结果初始化
+			s=sr.next();
+			for(int j=0;j<s.length();j++) {
+				if(s.charAt(j)>='A') {//如果是字母
+					result+=(long)((s.charAt(j)-'A'+10)*Math.pow(16, s.length()-1-j));//先把字母转换为10到15按权值转换为16的n-1次方转化为10进制
+				}
+				else {
+					result+=(long)((s.charAt(j)-'0')*Math.pow(16, s.length()-1-j));//不然就直接按权值转换为16的n-1次方转化为10进制
+				}
+			}
+			System.out.println(Long.toOctalString(result));//输出结果
+		}
+		sr.close();
+	}
+
+}

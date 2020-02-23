@@ -1,0 +1,97 @@
+package DanYuanZuiDuanRoad;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.StreamTokenizer;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.PriorityQueue;
+
+public class Main {
+
+	private static StreamTokenizer stk;//学长的代码
+
+	private static LinkedList<danyuanZuiDuan>[] side;//定义类列表存内容
+	private static int[] result;//存最后的结果
+	private static int n, start;//点数，起点 
+
+	@SuppressWarnings("unchecked")
+	public static void main(String[] args) {
+		stk = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+		n = nextInt();// 点数
+		int m = nextInt();// 边数
+		start = nextInt();// 起点
+		side = new LinkedList[n + 1];//开辟列表空间
+		result = new int[n + 1];//存储结果数组
+		for (int i = 1; i <= n; i++) //初始化
+			side[i] = new LinkedList<>();//创建新列表
+			result[i] = 0x3f3f3f3f;//初始化数组，放入不可能值
+		}
+		while (m-- > 0) {//输入m组数据（ui到vi的有向图距离wi）
+			side[nextInt()].add(new danyuanZuiDuan(nextInt(), nextInt()));// 存图
+		}
+		Dijkstra();//调用对于无负边的情况下可以达到O(nlogn)且很难被卡
+		//具体思路：Dijkstra是基于一种贪心的策略，
+		//首先用数组dis记录起点到每个结点的最短路径，再用一个数组保存已经找到最短路径的点
+		StringBuilder s = new StringBuilder();//用来存结果输出用
+		for (int i = 1; i <= n; i++) {//结果存入数组后用优化字符串来打印结果
+			s.append(result[i]);//
+			s.append(" ");//空格隔开
+		}
+		// 优化输出
+		PrintWriter out = new PrintWriter(new OutputStreamWriter(System.out));
+		out.println(s);
+		out.flush();
+
+	}
+
+	private static void Dijkstra() {
+		int count = 0;//用来计数
+		PriorityQueue<danyuanZuiDuan> pq = new PriorityQueue<>();//优先升队列计入起点与距离
+		pq.add(new danyuanZuiDuan(start, 0));
+
+		while (pq.size() > 0 && count < n) {//如果有目的地，并且存在距离
+			danyuanZuiDuan poll = pq.poll();// 取出最小的
+
+			if (result[poll.g] == 0x3f3f3f3f) {// 判断是否遍历过
+
+				result[poll.g] = poll.w;//到达位置的距离记录下来
+				count++;//计数
+
+				Iterator<danyuanZuiDuan> it = side[poll.g].iterator();//迭代器存储边用来搜索存储结果
+				while (it.hasNext()) {// 遍历每条出边
+					danyuanZuiDuan t = it.next();//把side里到目的地的距离遍历
+					pq.add(new danyuanZuiDuan(t.g, poll.w + t.w));//把到达位置和到达距离存入队列
+				}
+
+			}
+		}
+	}
+
+	public static int nextInt() {优化输入输出，目前学不下，还是用简单的StreamTokenizer优化吧；
+		try {
+			stk.nextToken();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return (int) stk.nval;
+	}
+}
+
+class danyuanZuiDuan implements Comparable<danyuanZuiDuan> {定义结构体
+	int g;到达位置
+	int w;距离
+
+	public danyuanZuiDuan(int g, int w) {
+		this.g = g;//构造器存入
+		this.w = w;
+	}
+
+	@Override
+	public int compareTo(danyuanZuiDuan o) {
+		return this.w - o.w;//比较器
+	}
+
+}

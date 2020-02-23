@@ -1,0 +1,41 @@
+package TianTuColor;
+
+import java.util.Scanner;
+
+public class Main {
+	static int f[][], a[];
+	public static void main(String[] args) {
+		int n;
+		Scanner sr = new Scanner(System.in);//输入
+		String s = sr.next();//输入字符串
+//		System.out.println(s);
+		n = s.length();//记录字符串长度
+//		System.out.println(n);
+		a = new int[n+1];//用来存储内容
+		f = new int[n+1][n+1];//动态求答案
+		for(int i=0;i<=n;i++) {
+			for(int j=0;j<=n;j++)//
+			{
+				f[i][j]=1000000000;//初始化
+			}
+		}
+		    for (int i = 0; i < n; i++) f[i][i] = 1;//将不可能的斜对角存入图中
+		    for (int l = 1; l < n; l++)//
+		        for (int i = 0; i < n; i++) {//
+//题意是求对字符串的最少染色次数，设f[i][j]为字符串的子串s[i]~s[j]的最少染色次数，我们分析一下：
+//当i==j时，子串明显只需要涂色一次，于是f[i][j]=1。
+//当i!=j且s[i]==s[j]时，可以想到只需要在首次涂色时多涂一格即可，于是f[i][j]=min(f[i][j-1],f[i+1][j])
+//当i!=j且s[i]!=s[j]时，我们需要考虑将子串断成两部分来涂色，于是需要枚举子串的断点，设断点为k，那么f[i][j]=min(f[i][j],f[i][k]+f[k+1][j])
+//总结一下就是：
+//由于f[i][j]的定义，我们可以知道f[1][n]即为答案。
+		            int j = i + l;用来存入
+		            if (j >= n) break;
+		            if (s.charAt(i) == s.charAt(j)) f[i][j] = Math.min(f[i][j - 1], f[i + 1][j]);//
+		            else for (int k = i; k < j; k++) f[i][j] = Math.min(f[i][j], f[i][k] + f[k + 1][j]);//
+		        }
+		    System.out.println(f[0][n - 1]);把最后的就是结果输出
+	
+		sr.close();
+	}
+
+}
